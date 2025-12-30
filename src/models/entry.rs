@@ -56,4 +56,23 @@ impl Entry {
     pub fn display_name(&self) -> String {
         self.name.clone().unwrap_or_else(|| self.short_id())
     }
+
+    pub fn contains_path(&self, path: &str) -> bool {
+        self.items.iter().any(|item| {
+            item.original_path.to_string_lossy().contains(path)
+        })
+    }
+
+    pub fn get_item(&self, original_path: &Path) -> Option<&Item> {
+        self.items.iter().find(|item| item.original_path == original_path)
+    }
+
+    pub fn file_count(&self) -> usize {
+        self.items.len()
+    }
+
+    pub fn recalculate_size(&mut self) {
+        self.total_size_bytes = self.items.iter().map(|i| i.size_bytes).sum();
+        self.touch();
+    }
 }
