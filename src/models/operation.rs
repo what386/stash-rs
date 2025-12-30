@@ -82,6 +82,11 @@ impl Operation {
         )
     }
 
+
+    pub fn involves_entry(&self, entry_id: &Uuid) -> bool {
+        self.entry_id() == Some(*entry_id)
+    }
+
     pub fn entry_id(&self) -> Option<Uuid> {
         match &self.kind {
             OperationKind::Push { entry_id, .. }
