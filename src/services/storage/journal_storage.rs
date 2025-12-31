@@ -5,12 +5,12 @@ use uuid::Uuid;
 
 use crate::models::Operation;
 
-pub struct Journal {
+pub struct JournalStorage {
     journal: Vec<Operation>,
     log_file: PathBuf,
 }
 
-impl Journal {
+impl JournalStorage {
     pub fn new(log_file: &Path) -> Result<Self> {
         let mut storage = Self {
             journal: Vec::new(),

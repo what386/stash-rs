@@ -7,5 +7,6 @@ pub mod config;
 pub use index::Index;
 pub use index::EntryMetadata;
 
+pub use operation::OperationKind;
 pub use operation::Operation;
 pub use config::Config;

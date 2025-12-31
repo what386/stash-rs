@@ -18,11 +18,11 @@ pub struct Cli {
     #[arg(short, long)]
     pub name: Option<String>,
 
-    /// Force push (stash files/directories)
+    /// Explicit push (stash files/directories)
     #[arg(short = 'p', long, conflicts_with_all = &["pop", "peek"])]
     pub push: bool,
 
-    /// Force pop (restore and remove from stash)
+    /// Explicit pop (restore and remove from stash)
     #[arg(short = 'P', long, conflicts_with_all = &["push", "peek"])]
     pub pop: bool,
 
