@@ -12,15 +12,15 @@ pub struct EntryMetadata {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Stash {
+pub struct Index {
     pub name: Option<String>,
     pub created: DateTime<Utc>,
     pub updated: DateTime<Utc>,
-    pub entries: Vec<EntryMetadata>,  // Changed from Vec<Entry>
+    pub entries: Vec<EntryMetadata>,
     pub total_size_bytes: u64,
 }
 
-impl Default for Stash {
+impl Default for Index {
     fn default() -> Self {
         Self {
             name: None,
@@ -32,7 +32,7 @@ impl Default for Stash {
     }
 }
 
-impl Stash {
+impl Index {
     pub fn new(name: Option<String>) -> Self {
         Self {
             name,
@@ -126,7 +126,7 @@ impl Stash {
         self.entries.is_empty()
     }
 
-    fn touch(&mut self) {
+    pub fn touch(&mut self) {
         self.updated = Utc::now();
     }
 }

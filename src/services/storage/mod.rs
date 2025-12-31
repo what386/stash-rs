@@ -1,3 +1,3 @@
 pub mod config_storage;
-pub mod stash_storage;
-pub mod journal;
+pub mod index_storage;
+pub mod journal_storage;
