@@ -32,7 +32,7 @@ pub fn run(delete: bool) -> Result<()> {
 
         if delete {
             entry_manager.delete_entry(&uuid)?;
-            println!("  ✓ Deleted: {}", entry.name);
+            println!("  Deleted: {}", entry.name);
         } else {
             let options = crate::operations::entry_manager::PopOptions {
                 destination: &cwd,
@@ -40,11 +40,11 @@ pub fn run(delete: bool) -> Result<()> {
                 force: &true,
             };
             entry_manager.pop_entry(&uuid, options)?;
-            println!("  ✓ Restored: {}", entry.name);
+            println!("  Restored: {}", entry.name);
         }
     }
 
-    println!("\n✓ Dump complete.");
+    println!("\nDump complete.");
 
     Ok(())
 }

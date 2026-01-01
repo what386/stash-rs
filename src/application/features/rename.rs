@@ -17,7 +17,7 @@ pub fn run(old: &str, new: &str) -> Result<()> {
     let entry = entry_manager.load_entry_by_identifier(old)?;
     entry_manager.rename_entry(&entry.uuid, new.to_string())?;
 
-    println!("✓ Renamed '{}' → '{}'", old, new);
+    println!("Renamed '{}' → '{}'", old, new);
 
     Ok(())
 }

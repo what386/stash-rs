@@ -46,7 +46,7 @@ pub fn run(output_path: &PathBuf) -> Result<()> {
     // Cleanup temp directory
     std::fs::remove_dir_all(&temp_dir)?;
 
-    println!("\n✓ Exported {} entries to {}", entries.len(), output_path.display());
+    println!("\nExported {} entries to {}", entries.len(), output_path.display());
 
     Ok(())
 }

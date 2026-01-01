@@ -30,20 +30,16 @@ pub fn run(
         if let Ok(parsed_uuid) = Uuid::parse_str(ident) {
             // Verify it exists
             entry_manager.load_entry(&parsed_uuid)?;
-            println!("Restoring entry by UUID: {}", parsed_uuid);
             parsed_uuid
         } else {
             // Try to find by name or partial UUID
             let entry = entry_manager.load_entry_by_identifier(ident)?;
-            println!("Restoring entry: {}", ident);
             entry.uuid
         }
     } else {
         // No identifier → pop most recent
         let recent = entry_manager.most_recent_entry()
             .ok_or_else(|| anyhow!("No stashed entries found"))?;
-
-        println!("Restoring most recent entry: {}", recent.name);
 
         recent.uuid
     };
@@ -78,7 +74,7 @@ pub fn run(
     };
 
     println!(
-        "✓ {} {} file(s) from '{}' {}",
+        "{} {} file(s) from '{}' {}",
         action,
         entry.items.len(),
         entry.name,
@@ -88,7 +84,7 @@ pub fn run(
     // Show what was restored (up to 10 files)
     if entry.items.len() <= 10 {
         for item in &entry.items {
-            println!("  • {}", item.original_path.display());
+            println!("- {}", item.original_path.display());
         }
     } else {
         println!("  ({} files total)", entry.items.len());

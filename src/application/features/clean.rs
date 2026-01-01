@@ -18,7 +18,7 @@ pub fn run(days: i64) -> Result<()> {
     if removed.is_empty() {
         println!("No entries older than {} days.", days);
     } else {
-        println!("✓ Cleaned {} entries older than {} days.", removed.len(), days);
+        println!("Cleaned {} entries older than {} days.", removed.len(), days);
     }
 
     Ok(())

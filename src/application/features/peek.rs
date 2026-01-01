@@ -25,7 +25,7 @@ pub fn run(identifier: &Option<String>, force: &bool) -> Result<()> {
     entry_manager.peek_entry(&entry.uuid, &cwd, *force)?;
 
     println!(
-        "✓ Peeked {} file(s) from '{}' (entry remains in stash)",
+        "Peeked {} file(s) from '{}'",
         entry.items.len(),
         entry.name
     );
