@@ -51,14 +51,14 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          cp target/${{ matrix.target }}/release/upstream-rs${{ matrix.ext }} \
-             dist/upstream-rs-${{ matrix.target }}${{ matrix.ext }}
+          cp target/${{ matrix.target }}/release/stash-rs${{ matrix.ext }} \
+             dist/stash-rs-${{ matrix.target }}${{ matrix.ext }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: upstream-rs-${{ matrix.target }}
-          path: dist/upstream-rs-${{ matrix.target }}${{ matrix.ext }}
+          name: stash-rs-${{ matrix.target }}
+          path: dist/stash-rs-${{ matrix.target }}${{ matrix.ext }}
 
   release:
     name: Create GitHub Release
