@@ -13,7 +13,6 @@ pub enum OperationKind {
     Dump { entry_count: usize, deleted: bool },
     Rename { entry_id: Uuid, old_name: String, new_name: String },
     Clean { removed_count: usize, days: i64 },
-    Import { path: PathBuf, entry_count: usize },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -65,9 +64,6 @@ impl Operation {
             }
             OperationKind::Clean { removed_count, days } => {
                 format!("Cleaned {} entries older than {} days", removed_count, days)
-            }
-            OperationKind::Import { path, entry_count } => {
-                format!("Imported {} entries from {}", entry_count, path.display())
             }
         }
     }

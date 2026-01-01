@@ -1,3 +1,4 @@
+use anyhow::{Result, anyhow};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::{os::unix::fs::PermissionsExt, path::{Path, PathBuf}};
@@ -52,7 +53,7 @@ impl Item {
         original_path: PathBuf,
         stashed_path: PathBuf,
         calculate_hash: bool,
-    ) -> std::io::Result<Self> {
+    ) -> Result<Self> {
         use std::fs;
 
         let metadata = fs::metadata(&original_path)?;

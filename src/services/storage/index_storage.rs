@@ -186,6 +186,17 @@ impl IndexStorage {
         entries
     }
 
+    pub fn update_entry_name(&mut self, uuid: &Uuid, name: String) -> Result<()> {
+        if let Some(entry) = self.stash.entries.iter_mut().find(|e| &e.uuid == uuid) {
+            entry.name = Some(name);
+            self.stash.touch();
+            self.save_packages()?;
+            Ok(())
+        } else {
+            Err(anyhow!("Entry with UUID {} not found", uuid))
+        }
+    }
+
     /// Update an existing entry's metadata and save
     pub fn update_entry_metadata(
         &mut self,
