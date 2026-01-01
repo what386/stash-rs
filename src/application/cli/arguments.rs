@@ -26,11 +26,11 @@ pub struct Cli {
     #[arg(short = 'P', long, conflicts_with_all = &["push", "peek"])]
     pub pop: bool,
 
-    /// Copy instead of move when stashing
+    /// Copy instead of move
     #[arg(short, long, conflicts_with = "link")]
     pub copy: bool,
 
-    /// Symlink to stashed copy instead of moving
+    /// Create symlinks to stashed files (leave symlinks in place after stashing)
     #[arg(short, long, conflicts_with = "copy")]
     pub link: bool,
 
@@ -38,13 +38,13 @@ pub struct Cli {
     #[arg(long, conflicts_with_all = &["push", "copy", "link"])]
     pub peek: bool,
 
-    /// Delete files instead of restoring
+    /// Force overwrite existing files
     #[arg(short, long)]
-    pub delete: bool,
+    pub force: bool,
 
-    /// Allow symlinking directories (normally disabled)
-    #[arg(long, requires = "link")]
-    pub allow_dirs: bool,
+    /// Delete instead of restore
+    #[arg(short = 'd', long)]
+    pub delete: bool,
 
     /// List all stashed entries
     #[arg(short = 'l', long)]
@@ -54,7 +54,7 @@ pub struct Cli {
     #[arg(short, long)]
     pub search: Option<String>,
 
-    /// Show detailed info about entry or entire stash
+    /// Show detailed info about entry
     #[arg(short, long)]
     pub info: bool,
 
@@ -70,21 +70,17 @@ pub struct Cli {
     #[arg(long)]
     pub clean: Option<Option<i64>>,
 
-    /// Rename an entry
-    #[arg(short, long, value_name = "OLD:NEW")]
+    /// Restore entry to its original location
+    #[arg(long)]
+    pub restore: bool,
+
+    /// Rename an entry (format: old:new)
+    #[arg(long, value_name = "OLD:NEW")]
     pub rename: Option<String>,
 
     /// Export stash to tar archive
     #[arg(long, value_name = "FILE")]
     pub tar: Option<PathBuf>,
-
-    /// Import stash from tar archive
-    #[arg(long, value_name = "FILE")]
-    pub import: Option<PathBuf>,
-
-    /// Restore entry to its original location
-    #[arg(long)]
-    pub restore: bool,
 
     /// Dump all entries (restore or delete all)
     #[arg(long)]
@@ -93,26 +89,41 @@ pub struct Cli {
 
 #[derive(Debug, Clone)]
 pub enum OperationMode {
-    /// Infer from context (magic mode)
-    Infer,
     /// Force push files
-    Push { copy: bool, link: bool },
-    /// Force pop entry
-    Pop,
-    /// Pop most recent entry
-    PopRecent,
+    Push {
+        items: Vec<PathBuf>,
+        name: Option<String>,
+        copy: bool,
+        link: bool,
+    },
+    /// Force pop entry by identifier
+    Pop {
+        identifier: Option<String>,
+        copy: bool,
+        force: bool,
+        restore: bool,
+    },
     /// Copy out without removing
-    Peek,
-    /// Restore to original location
-    Restore { delete: bool },
-    /// Remove all entries
-    Dump { delete: bool },
+    Peek {
+        identifier: Option<String>,
+        force: bool,
+    },
+    /// Delete entry without restoring
+    Delete {
+        identifier: String,
+    },
+    /// Dump all entries
+    Dump {
+        delete: bool,
+    },
     /// List all entries
     List,
     /// Search by pattern
     Search(String),
-    /// Show info
-    Info,
+    /// Show info about entry or stash
+    Info {
+        identifier: Option<String>,
+    },
     /// Show history
     History,
     /// Undo last operation
@@ -120,9 +131,10 @@ pub enum OperationMode {
     /// Clean old entries
     Clean(i64),
     /// Rename entry
-    Rename { old: String, new: String },
+    Rename {
+        old: String,
+        new: String,
+    },
     /// Export to tar
     Tar(PathBuf),
-    /// Import from tar
-    Import(PathBuf),
 }
