@@ -14,6 +14,8 @@ pub struct ConfigStorage {
 
 impl ConfigStorage {
     pub fn new(config_file: &Path) -> Result<Self> {
+
+
         let mut storage = Self {
             config: Config::default(),
             config_file: config_file.to_path_buf(),

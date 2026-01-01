@@ -43,8 +43,7 @@ pub fn run(
         let recent = entry_manager.most_recent_entry()
             .ok_or_else(|| anyhow!("No stashed entries found"))?;
 
-        println!("Restoring most recent entry: {}",
-            recent.name.as_ref().unwrap_or(&recent.uuid.to_string()));
+        println!("Restoring most recent entry: {}", recent.name);
 
         recent.uuid
     };
@@ -82,7 +81,7 @@ pub fn run(
         "✓ {} {} file(s) from '{}' {}",
         action,
         entry.items.len(),
-        entry.name.as_ref().unwrap_or(&uuid.to_string()),
+        entry.name,
         destination
     );
 

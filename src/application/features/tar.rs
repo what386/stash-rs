@@ -31,18 +31,13 @@ pub fn run(output_path: &PathBuf) -> Result<()> {
     for meta in entries {
         let entry = entry_manager.load_entry(&meta.uuid)?;
 
-        let uuid_str = meta.uuid.to_string();
-        let entry_name = entry.name.as_ref()
-            .map(|s| s.as_str())
-            .unwrap_or(&uuid_str);
-
         let entry_dir = dirs.entries_dir.join(meta.uuid.to_string());
-        let dest_dir = temp_dir.join(entry_name);
+        let dest_dir = temp_dir.join(&entry.name);
 
         // Copy the entire entry directory (including manifest and data)
         copy_dir_all(&entry_dir, &dest_dir)?;
 
-        println!("  • {}", entry_name);
+        println!("  • {}", entry.name);
     }
 
     // Create tar archive from temp directory

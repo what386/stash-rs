@@ -17,11 +17,7 @@ pub fn run(pattern: &str) -> Result<()> {
     let pattern_lower = pattern.to_lowercase();
 
     let matches: Vec<_> = entries.iter()
-        .filter(|e| {
-            e.name.as_ref()
-                .map(|n| n.to_lowercase().contains(&pattern_lower))
-                .unwrap_or(false)
-        })
+        .filter(|e| e.name.to_lowercase().contains(&pattern_lower))
         .collect();
 
     if matches.is_empty() {
@@ -32,11 +28,10 @@ pub fn run(pattern: &str) -> Result<()> {
     println!("Found {} match{}:\n", matches.len(), if matches.len() == 1 { "" } else { "es" });
 
     for meta in matches {
-        let name = meta.name.as_ref().unwrap();
         let age = humanize_duration(meta.created);
         let size = humanize_size(meta.total_size_bytes);
 
-        println!("  • {} ({} files, {}, {})", name, meta.item_count, size, age);
+        println!("  • {} ({} files, {}, {})", meta.name, meta.item_count, size, age);
     }
 
     Ok(())

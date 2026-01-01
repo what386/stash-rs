@@ -5,7 +5,7 @@ use uuid::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EntryMetadata {
     pub uuid: Uuid,
-    pub name: Option<String>,
+    pub name: String,
     pub created: DateTime<Utc>,
     pub total_size_bytes: u64,
     pub item_count: usize,
@@ -43,7 +43,7 @@ impl Index {
         }
     }
 
-    pub fn add_entry(&mut self, uuid: Uuid, name: Option<String>, size: u64, item_count: usize) {
+    pub fn add_entry(&mut self, uuid: Uuid, name: String, size: u64, item_count: usize) {
         let metadata = EntryMetadata {
             uuid,
             name,
@@ -69,7 +69,7 @@ impl Index {
     }
 
     pub fn find_by_name(&self, name: &str) -> Option<&EntryMetadata> {
-        self.entries.iter().find(|e| e.name.as_deref() == Some(name))
+        self.entries.iter().find(|e| e.name == name)
     }
 
     pub fn find_by_identifier(&self, identifier: &str) -> Option<&EntryMetadata> {
@@ -88,10 +88,7 @@ impl Index {
         self.entries
             .iter()
             .filter(|e| {
-                e.name
-                    .as_ref()
-                    .map(|n| n.to_lowercase().contains(&pattern_lower))
-                    .unwrap_or(false)
+                e.name.to_lowercase().contains(&pattern_lower)
                     || e.uuid.to_string().starts_with(&pattern_lower)
             })
             .collect()

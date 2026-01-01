@@ -19,7 +19,7 @@ pub struct EntryManager<'a> {
 }
 
 pub struct PushOptions<'a> {
-    pub name: &'a Option<String>,
+    pub name: &'a String,
     pub copy: &'a bool,
     pub link: &'a bool,
 }
@@ -276,11 +276,8 @@ impl<'a> EntryManager<'a> {
     }
 
     pub fn rename_entry(&mut self, uuid: &Uuid, new_name: String) -> Result<()> {
-        let mut entry = self.load_entry(uuid)?;
+        let entry = self.load_entry(uuid)?;
         let old_name = entry.name.clone();
-
-        entry.name = Some(new_name.clone());
-        entry.updated = Utc::now();
 
         self.write_manifest(&entry)?;
         self.index_storage.update_entry_name(uuid, new_name.clone())?;
@@ -288,8 +285,8 @@ impl<'a> EntryManager<'a> {
         self.journal_storage.append(Operation::new(
             OperationKind::Rename {
                 entry_id: *uuid,
-                old_name: old_name.unwrap_or(uuid.to_string()),
-                new_name: new_name.clone(),
+                old_name,
+                new_name,
             }
         ))?;
 

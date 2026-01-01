@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use anyhow::Result;
 
@@ -18,15 +18,21 @@ pub fn run(
 
     let dirs = AppDirs::new();
 
-    ConfigStorage::new(&dirs.config_file);
+    ConfigStorage::new(&dirs.config_file)?;
 
     let mut index_storage = IndexStorage::new(&dirs.index_file)?;
     let mut journal_storage = JournalStorage::new(&dirs.journal_file)?;
 
     let mut entry_manager = EntryManager::new(&dirs.entries_dir, &mut index_storage, &mut journal_storage)?;
 
+    let default_name = items[0]
+        .file_name()
+        .unwrap()
+        .to_string_lossy()
+        .to_string();
+
     let options = entry_manager::PushOptions {
-        name: name,
+        name: &name.as_ref().unwrap_or(&default_name),
         copy: clone,
         link: link,
     };

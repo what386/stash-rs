@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use crate::application::cli::arguments::{Cli, OperationMode};
 use std::path::PathBuf;
 
@@ -6,6 +6,10 @@ pub fn infer_operation(cli: &Cli) -> Result<OperationMode> {
     // ========================================================================
     // Priority 1: Information and management flags
     // ========================================================================
+
+    if cli.init {
+        return Ok(OperationMode::Init);
+    }
 
     if cli.list {
         return Ok(OperationMode::List);
@@ -29,7 +33,7 @@ pub fn infer_operation(cli: &Cli) -> Result<OperationMode> {
     }
 
     if let Some(days) = cli.clean {
-        return Ok(OperationMode::Clean(days.unwrap_or(30)));
+        return Ok(OperationMode::Clean(days));
     }
 
     if let Some(spec) = &cli.rename {

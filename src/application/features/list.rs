@@ -22,16 +22,14 @@ pub fn run() -> Result<()> {
 
     println!("Stashed entries:\n");
     for (i, meta) in entries.iter().enumerate() {
-        let name = meta.name.as_ref()
-            .map(|s| s.as_str())
-            .unwrap_or("(unnamed)");
+
         let age = humanize_duration(meta.created);
         let size = humanize_size(meta.total_size_bytes);
 
         println!(
             "{}. {} ({} files, {}, {})",
             i + 1,
-            name,
+            meta.name,
             meta.item_count,
             size,
             age

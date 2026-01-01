@@ -1,92 +1,6 @@
 use clap::Parser;
 use std::path::PathBuf;
 
-#[derive(Parser)]
-#[command(name = "stash")]
-#[command(about = "A CLI tool for stashing files and folders", version)]
-#[command(long_about = "Intelligently stash and restore files based on context.\n\n\
-    EXAMPLES:\n  \
-    stash file.txt          # Stash if exists, restore if in stash\n  \
-    stash                   # Restore most recent entry\n  \
-    stash --name work src/  # Stash with custom name\n  \
-    stash --list            # Show all entries")]
-pub struct Cli {
-    /// Files/directories or entry names to operate on
-    pub items: Vec<PathBuf>,
-
-    /// Name for this stash entry
-    #[arg(short, long)]
-    pub name: Option<String>,
-
-    /// Explicit push (stash files/directories)
-    #[arg(short = 'p', long, conflicts_with_all = &["pop", "peek"])]
-    pub push: bool,
-
-    /// Explicit pop (restore and remove from stash)
-    #[arg(short = 'P', long, conflicts_with_all = &["push", "peek"])]
-    pub pop: bool,
-
-    /// Copy instead of move
-    #[arg(short, long, conflicts_with = "link")]
-    pub copy: bool,
-
-    /// Create symlinks to stashed files (leave symlinks in place after stashing)
-    #[arg(short, long, conflicts_with = "copy")]
-    pub link: bool,
-
-    /// Copy out without removing from stash
-    #[arg(long, conflicts_with_all = &["push", "copy", "link"])]
-    pub peek: bool,
-
-    /// Force overwrite existing files
-    #[arg(short, long)]
-    pub force: bool,
-
-    /// Delete instead of restore
-    #[arg(short = 'd', long)]
-    pub delete: bool,
-
-    /// List all stashed entries
-    #[arg(short = 'l', long)]
-    pub list: bool,
-
-    /// Search entries by pattern
-    #[arg(short, long)]
-    pub search: Option<String>,
-
-    /// Show detailed info about entry
-    #[arg(short, long)]
-    pub info: bool,
-
-    /// Show operation history
-    #[arg(long)]
-    pub history: bool,
-
-    /// Undo last operation
-    #[arg(short, long)]
-    pub undo: bool,
-
-    /// Clean entries older than N days (default: 30)
-    #[arg(long)]
-    pub clean: Option<Option<i64>>,
-
-    /// Restore entry to its original location
-    #[arg(long)]
-    pub restore: bool,
-
-    /// Rename an entry (format: old:new)
-    #[arg(long, value_name = "OLD:NEW")]
-    pub rename: Option<String>,
-
-    /// Export stash to tar archive
-    #[arg(long, value_name = "FILE")]
-    pub tar: Option<PathBuf>,
-
-    /// Dump all entries (restore or delete all)
-    #[arg(long)]
-    pub dump: bool,
-}
-
 #[derive(Debug, Clone)]
 pub enum OperationMode {
     /// Force push files
@@ -137,4 +51,86 @@ pub enum OperationMode {
     },
     /// Export to tar
     Tar(PathBuf),
+    /// Initialize
+    Init,
+}
+
+#[derive(Parser)]
+#[command(name = "stash")]
+#[command(about = "A CLI tool for stashing files and folders", version)]
+#[command(long_about = "Intelligently stash and restore files based on context.\n\n\
+    EXAMPLES:\n  \
+    stash file.txt          # Stash if exists, restore if in stash\n  \
+    stash                   # Restore most recent entry\n  \
+    stash --name work src/  # Stash with custom name\n  \
+    stash --list            # Show all entries")]
+#[command(version)]
+#[command(group(
+    clap::ArgGroup::new("operation")
+        .args(&["push", "pop", "peek", "delete", "list", "search",
+                "info", "history", "undo", "clean", "rename", "tar", "dump"])
+        .required(false)
+))]
+pub struct Cli {
+    pub items: Vec<PathBuf>,
+
+    #[arg(short, long)]
+    pub name: Option<String>,
+
+    // Operation flags
+    #[arg(short = 'p', long)]
+    pub push: bool,
+
+    #[arg(short = 'P', long)]
+    pub pop: bool,
+
+    #[arg(long)]
+    pub peek: bool,
+
+    #[arg(short = 'd', long)]
+    pub delete: bool,
+
+    #[arg(short = 'L', long)]
+    pub list: bool,
+
+    #[arg(short, long)]
+    pub search: Option<String>,
+
+    #[arg(short, long)]
+    pub info: bool,
+
+    #[arg(long)]
+    pub history: bool,
+
+    #[arg(short, long)]
+    pub undo: bool,
+
+    #[arg(long)]
+    pub init: bool,
+
+    // Clean with optional days parameter (defaults to some value if not specified)
+    #[arg(long, value_name = "DAYS", default_missing_value = "30")]
+    pub clean: Option<i64>,
+
+    #[arg(long, value_name = "OLD:NEW")]
+    pub rename: Option<String>,
+
+    #[arg(long, value_name = "FILE")]
+    pub tar: Option<PathBuf>,
+
+    #[arg(long)]
+    pub dump: bool,
+
+    // Modifiers (not operations themselves)
+    #[arg(short, long, help = "Copy instead of move")]
+    pub copy: bool,
+
+    #[arg(short = 'l', long, conflicts_with = "copy")]
+    pub link: bool,
+
+    #[arg(short, long, help = "Overwrite existing files")]
+    pub force: bool,
+
+    #[arg(long, help = "Restore original paths (use with --pop)")]
+    pub restore: bool,
 }

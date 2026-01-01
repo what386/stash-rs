@@ -3,6 +3,7 @@ use anyhow::Result;
 use crate::application::cli::arguments::{Cli, OperationMode};
 use crate::application::cli::inference;
 use crate::application::features;
+use crate::utils::paths::AppDirs;
 
 impl Cli {
     pub fn run(self) -> Result<()> {
@@ -61,6 +62,10 @@ impl Cli {
 
             OperationMode::Tar(path) => {
                 features::tar::run(&path)
+            }
+
+            OperationMode::Init => {
+                AppDirs::new().init()
             }
         }
     }

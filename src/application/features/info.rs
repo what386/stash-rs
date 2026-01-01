@@ -21,7 +21,7 @@ pub fn run(identifier: &Option<String>) -> Result<()> {
         entry_manager.load_entry(&meta.uuid)?
     };
 
-    println!("Entry: {}\n", entry.name.as_ref().unwrap_or(&entry.uuid.to_string()));
+    println!("Entry: {}\n", entry.name);
     println!("UUID: {}", entry.uuid);
     println!("Created: {}", entry.created.format("%Y-%m-%d %H:%M:%S"));
     println!("Working directory: {}", entry.working_directory.display());

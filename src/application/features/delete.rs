@@ -16,13 +16,10 @@ pub fn run(identifier: &str) -> Result<()> {
     let entry = entry_manager.load_entry_by_identifier(identifier)?;
 
     let uuid_str = entry.uuid.to_string();
-    let entry_name = entry.name.as_ref()
-        .map(|s| s.as_str())
-        .unwrap_or(&uuid_str);
 
     entry_manager.delete_entry(&entry.uuid)?;
 
-    println!("✓ Deleted entry '{}' ({} files)", entry_name, entry.items.len());
+    println!("✓ Deleted entry '{}' ({} files)", entry.name, entry.items.len());
 
     Ok(())
 }

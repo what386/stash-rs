@@ -8,7 +8,7 @@ use crate::models::item::Item;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Entry {
     pub uuid: Uuid,
-    pub name: Option<String>,
+    pub name: String,
     pub created: DateTime<Utc>,
     pub updated: DateTime<Utc>,
     pub working_directory: PathBuf,
@@ -19,7 +19,7 @@ pub struct Entry {
 
 impl Entry {
     pub fn new(
-        name: Option<String>,
+        name: String,
         items: Vec<Item>,
         working_directory: PathBuf,
         was_destructive: bool,
@@ -51,10 +51,6 @@ impl Entry {
 
     pub fn short_id(&self) -> String {
         self.uuid.to_string()[..6].to_string()
-    }
-
-    pub fn display_name(&self) -> String {
-        self.name.clone().unwrap_or_else(|| self.short_id())
     }
 
     pub fn contains_path(&self, path: &str) -> bool {

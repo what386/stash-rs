@@ -27,7 +27,7 @@ pub fn run(identifier: &Option<String>, force: &bool) -> Result<()> {
     println!(
         "✓ Peeked {} file(s) from '{}' (entry remains in stash)",
         entry.items.len(),
-        entry.name.as_ref().unwrap_or(&entry.uuid.to_string())
+        entry.name
     );
 
     Ok(())

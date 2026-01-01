@@ -41,13 +41,10 @@ impl IndexStorage {
             fs::create_dir_all(parent)
                 .map_err(|e| anyhow!("Failed to create index directory: {}", e))?;
         }
-
         let json = serde_json::to_string_pretty(&self.stash)
             .map_err(|e| anyhow!("Failed to serialize index: {}", e))?;
-
         fs::write(&self.stash_file, json)
             .map_err(|e| anyhow!("Failed to write index file: {}", e))?;
-
         Ok(())
     }
 
@@ -67,7 +64,7 @@ impl IndexStorage {
     }
 
     /// Add a new entry to the index and save
-    pub fn add_entry(&mut self, uuid: Uuid, name: Option<String>, size: u64, item_count: usize) -> Result<()> {
+    pub fn add_entry(&mut self, uuid: Uuid, name: String, size: u64, item_count: usize) -> Result<()> {
         self.stash.add_entry(uuid, name, size, item_count);
         self.save_packages()
     }
@@ -175,20 +172,14 @@ impl IndexStorage {
     /// Get entries sorted by name
     pub fn entries_by_name(&self) -> Vec<&EntryMetadata> {
         let mut entries: Vec<_> = self.stash.entries.iter().collect();
-        entries.sort_by(|a, b| {
-            match (&a.name, &b.name) {
-                (Some(name_a), Some(name_b)) => name_a.cmp(name_b),
-                (Some(_), None) => std::cmp::Ordering::Less,
-                (None, Some(_)) => std::cmp::Ordering::Greater,
-                (None, None) => std::cmp::Ordering::Equal,
-            }
-        });
+        entries.sort_by(|a, b| a.name.cmp(&b.name));
         entries
     }
 
+    /// Update an entry's name
     pub fn update_entry_name(&mut self, uuid: &Uuid, name: String) -> Result<()> {
         if let Some(entry) = self.stash.entries.iter_mut().find(|e| &e.uuid == uuid) {
-            entry.name = Some(name);
+            entry.name = name;
             self.stash.touch();
             self.save_packages()?;
             Ok(())
@@ -206,7 +197,10 @@ impl IndexStorage {
         item_count_delta: isize,
     ) -> Result<()> {
         if let Some(entry) = self.stash.entries.iter_mut().find(|e| &e.uuid == uuid) {
-            entry.name = name;
+            // Update name if provided
+            if let Some(new_name) = name {
+                entry.name = new_name;
+            }
 
             // Update size
             if size_delta >= 0 {

@@ -30,14 +30,9 @@ pub fn run(delete: bool) -> Result<()> {
     for uuid in entries {
         let entry = entry_manager.load_entry(&uuid)?;
 
-        let uuid_str = uuid.to_string();
-        let name = entry.name.as_ref()
-            .map(|s| s.as_str())
-            .unwrap_or(&uuid_str);
-
         if delete {
             entry_manager.delete_entry(&uuid)?;
-            println!("  ✓ Deleted: {}", name);
+            println!("  ✓ Deleted: {}", entry.name);
         } else {
             let options = crate::operations::entry_manager::PopOptions {
                 destination: &cwd,
@@ -45,7 +40,7 @@ pub fn run(delete: bool) -> Result<()> {
                 force: &true,
             };
             entry_manager.pop_entry(&uuid, options)?;
-            println!("  ✓ Restored: {}", name);
+            println!("  ✓ Restored: {}", entry.name);
         }
     }
 
