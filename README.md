@@ -1,7 +1,7 @@
 # Stash File Stack
 
 **Stash** is a stack-based file management tool for the terminal.
-It lets you temporarily move files and directories out of your working tree, then restore them later — without committing, archiving, or losing context.
+It lets you temporarily move files and directories out of your working tree, then restore them later.
 
 Stash is designed to feel _obvious_: in many cases, you don’t need to specify whether you’re pushing or popping — Stash infers your intent based on context.
 
