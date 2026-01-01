@@ -1,7 +1,11 @@
 use anyhow::{Result, anyhow};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::{os::unix::fs::PermissionsExt, path::{Path, PathBuf}};
+
+use std::path::{Path, PathBuf};
+
+#[cfg(unix)]
+use std::os::unix::fs::PermissionsExt;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum ItemKind {
@@ -56,17 +60,24 @@ impl Item {
     ) -> Result<Self> {
         use std::fs;
 
-        let metadata = fs::metadata(&original_path)?;
-        let kind = if metadata.is_dir() {
+        let metadata = fs::symlink_metadata(&original_path)?;
+
+        let kind = if metadata.file_type().is_dir() {
             ItemKind::Directory
-        } else if metadata.is_symlink() {
+        } else if metadata.file_type().is_symlink() {
             ItemKind::Symlink
         } else {
             ItemKind::File
         };
 
-        let size_bytes = metadata.len();
+        #[cfg(unix)]
         let permissions = metadata.permissions().mode();
+
+        #[cfg(windows)]
+        let permissions = 0;
+
+        let size_bytes = metadata.len();
+
         let modified = metadata.modified()?.into();
 
         let hash = if calculate_hash && kind == ItemKind::File {
