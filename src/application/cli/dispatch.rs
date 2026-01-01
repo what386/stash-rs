@@ -46,12 +46,6 @@ impl Cli {
                 features::history::run()
             }
 
-            OperationMode::Undo => {
-                //features::undo::run()
-                // TODO: implement
-                Ok(())
-            }
-
             OperationMode::Clean(days) => {
                 features::clean::run(days)
             }

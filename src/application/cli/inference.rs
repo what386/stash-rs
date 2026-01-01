@@ -28,10 +28,6 @@ pub fn infer_operation(cli: &Cli) -> Result<OperationMode> {
         return Ok(OperationMode::History);
     }
 
-    if cli.undo {
-        return Ok(OperationMode::Undo);
-    }
-
     if let Some(days) = cli.clean {
         return Ok(OperationMode::Clean(days));
     }

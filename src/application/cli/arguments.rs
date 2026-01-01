@@ -40,8 +40,6 @@ pub enum OperationMode {
     },
     /// Show history
     History,
-    /// Undo last operation
-    Undo,
     /// Clean old entries
     Clean(i64),
     /// Rename entry
@@ -68,7 +66,7 @@ pub enum OperationMode {
 #[command(group(
     clap::ArgGroup::new("operation")
         .args(&["push", "pop", "peek", "delete", "list", "search",
-                "info", "history", "undo", "clean", "rename", "tar", "dump"])
+                "info", "history", "init", "clean", "rename", "tar", "dump"])
         .required(false)
 ))]
 pub struct Cli {
@@ -102,13 +100,9 @@ pub struct Cli {
     #[arg(long)]
     pub history: bool,
 
-    #[arg(short, long)]
-    pub undo: bool,
-
     #[arg(long)]
     pub init: bool,
 
-    // Clean with optional days parameter (defaults to some value if not specified)
     #[arg(long, value_name = "DAYS", default_missing_value = "30")]
     pub clean: Option<i64>,
 
