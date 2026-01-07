@@ -1,6 +1,6 @@
 use anyhow::{Result, anyhow};
 use std::path::PathBuf;
-use crate::operations::entry_manager::EntryManager;
+use crate::services::entry_manager::EntryManager;
 use crate::services::storage::{IndexStorage, JournalStorage};
 use crate::utils::paths::AppDirs;
 use crate::services::filesystem::tape_archives;

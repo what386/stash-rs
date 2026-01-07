@@ -2,11 +2,11 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 
-use crate::operations::entry_manager;
+use crate::services::entry_manager;
 use crate::services::storage::{IndexStorage, JournalStorage};
 use crate::utils::paths::AppDirs;
 
-use crate::{operations::entry_manager::EntryManager, services::storage::ConfigStorage};
+use crate::{services::entry_manager::EntryManager, services::storage::ConfigStorage};
 
 pub fn run(
     items: &Vec<PathBuf>,

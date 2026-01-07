@@ -1,5 +1,5 @@
 use anyhow::Result;
-use crate::operations::entry_manager::EntryManager;
+use crate::services::entry_manager::EntryManager;
 use crate::services::storage::{IndexStorage, JournalStorage};
 use crate::utils::paths::AppDirs;
 
@@ -34,7 +34,7 @@ pub fn run(delete: bool) -> Result<()> {
             entry_manager.delete_entry(&uuid)?;
             println!("  Deleted: {}", entry.name);
         } else {
-            let options = crate::operations::entry_manager::PopOptions {
+            let options = crate::services::entry_manager::PopOptions {
                 destination: &cwd,
                 copy: &false,
                 force: &true,

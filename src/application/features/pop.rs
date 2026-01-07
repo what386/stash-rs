@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use anyhow::{Result, anyhow};
 use uuid::Uuid;
-use crate::operations::entry_manager::{EntryManager, PopOptions};
+use crate::services::entry_manager::{EntryManager, PopOptions};
 use crate::services::storage::{IndexStorage, JournalStorage};
 use crate::utils::paths::AppDirs;
 use crate::services::storage::ConfigStorage;

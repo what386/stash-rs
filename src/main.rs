@@ -2,7 +2,6 @@ mod models;
 mod application;
 mod services;
 mod utils;
-mod operations;
 
 use console::style;
 
