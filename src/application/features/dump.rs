@@ -28,7 +28,7 @@ pub fn run() -> Result<()> {
         return Ok(());
     }
 
-    println!("Restoring {} entries...\n", entries.len());
+    println!("Restoring {} entries...", entries.len());
 
     for uuid in entries {
         let entry = entry_manager.load_entry(&uuid)?;

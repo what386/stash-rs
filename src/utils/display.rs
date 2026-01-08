@@ -15,7 +15,7 @@ pub fn format_bytes(bytes: u64) -> String {
     }
 }
 
-fn humanize_duration(created: chrono::DateTime<chrono::Utc>) -> String {
+pub fn humanize_duration(created: chrono::DateTime<chrono::Utc>) -> String {
     let now = chrono::Utc::now();
     let duration = now.signed_duration_since(created);
 
@@ -33,7 +33,7 @@ fn humanize_duration(created: chrono::DateTime<chrono::Utc>) -> String {
     }
 }
 
-fn humanize_size(bytes: u64) -> String {
+pub fn humanize_size(bytes: u64) -> String {
     const KB: u64 = 1024;
     const MB: u64 = KB * 1024;
     const GB: u64 = MB * 1024;

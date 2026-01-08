@@ -12,7 +12,7 @@ pub fn run() -> Result<()> {
         return Ok(());
     }
 
-    println!("Operation history:\n");
+    println!("Operation history:");
     for op in operations {
         let timestamp = op.timestamp.format("%Y-%m-%d %H:%M:%S");
         println!("[{}] {}", timestamp, op.describe());

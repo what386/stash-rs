@@ -20,13 +20,11 @@ pub fn run(identifier: &Option<String>) -> Result<()> {
             .ok_or_else(|| anyhow!("No stashed entries found"))?;
         entry_manager.load_entry(&meta.uuid)?
     };
-
-    println!("Entry: {}\n", entry.name);
     println!("UUID: {}", entry.uuid);
     println!("Created: {}", entry.created.format("%Y-%m-%d %H:%M:%S"));
     println!("Working directory: {}", entry.working_directory.display());
     println!("Total size: {}", humanize_size(entry.total_size_bytes));
-    println!("Files: {}\n", entry.items.len());
+    println!("Files: {}", entry.items.len());
 
     for item in &entry.items {
         let kind = match item.kind {
@@ -38,24 +36,6 @@ pub fn run(identifier: &Option<String>) -> Result<()> {
     }
 
     Ok(())
-}
-
-fn humanize_duration(created: chrono::DateTime<chrono::Utc>) -> String {
-    let now = chrono::Utc::now();
-    let duration = now.signed_duration_since(created);
-
-    if duration.num_days() > 0 {
-        let days = duration.num_days();
-        format!("{} day{} ago", days, if days == 1 { "" } else { "s" })
-    } else if duration.num_hours() > 0 {
-        let hours = duration.num_hours();
-        format!("{} hour{} ago", hours, if hours == 1 { "" } else { "s" })
-    } else if duration.num_minutes() > 0 {
-        let minutes = duration.num_minutes();
-        format!("{} minute{} ago", minutes, if minutes == 1 { "" } else { "s" })
-    } else {
-        "just now".to_string()
-    }
 }
 
 fn humanize_size(bytes: u64) -> String {

@@ -25,7 +25,7 @@ pub fn run(output_path: &PathBuf) -> Result<()> {
     let temp_dir = std::env::temp_dir().join(format!("stash-export-{}", uuid::Uuid::new_v4()));
     std::fs::create_dir_all(&temp_dir)?;
 
-    println!("Exporting {} entries to {}...\n", entries.len(), output_path.display());
+    println!("Exporting {} entries to {}...", entries.len(), output_path.display());
 
     // Copy all entries into temp directory
     for meta in entries {
@@ -46,7 +46,7 @@ pub fn run(output_path: &PathBuf) -> Result<()> {
     // Cleanup temp directory
     std::fs::remove_dir_all(&temp_dir)?;
 
-    println!("\nExported {} entries to {}", entries.len(), output_path.display());
+    println!("Exported {} entries to {}", entries.len(), output_path.display());
 
     Ok(())
 }
