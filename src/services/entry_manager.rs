@@ -21,7 +21,6 @@ pub struct EntryManager<'a> {
 pub struct PushOptions<'a> {
     pub name: &'a String,
     pub copy: &'a bool,
-    pub link: &'a bool,
 }
 
 pub struct PopOptions<'a> {
@@ -129,25 +128,6 @@ impl<'a> EntryManager<'a> {
 
             // Preserve timestamps
             self.preserve_timestamps(src, &dest)?;
-        }
-
-        // Handle --link mode: create symlinks at original locations
-        if *options.link && !*options.copy {
-            for item in &entry.items {
-                let original = &item.original_path;
-                let stashed = data_dir.join(&item.stashed_path);
-
-                #[cfg(unix)]
-                {
-                    std::os::unix::fs::symlink(&stashed, original)
-                        .with_context(|| format!("Failed to create symlink at {:?}", original))?;
-                }
-
-                #[cfg(windows)]
-                {
-                    return Err(anyhow!("Symlink mode (--link) is unsupported on Windows"));
-                }
-            }
         }
 
         self.write_manifest(&entry)?;
