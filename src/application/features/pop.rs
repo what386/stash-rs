@@ -1,4 +1,3 @@
-use std::path::PathBuf;
 use anyhow::{Result, anyhow};
 use uuid::Uuid;
 use crate::services::entry_manager::{EntryManager, PopOptions};
