@@ -35,7 +35,7 @@ impl<'a> EntryManager<'a> {
         index_storage: &'a mut IndexStorage,
         journal_storage: &'a mut JournalStorage,
     ) -> Result<Self> {
-        fs::create_dir_all(&entries_root)?;
+        fs::create_dir_all(entries_root)?;
         Ok(Self {
             entries_root,
             index_storage,
