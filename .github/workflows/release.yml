@@ -70,6 +70,11 @@ jobs:
         with:
           path: dist
 
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum **/* > SHA256SUMS.txt
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
